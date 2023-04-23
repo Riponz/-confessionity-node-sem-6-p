@@ -1,0 +1,35 @@
+GET http://localhost:3001/login?email=d@qqq.n&password=1234
+
+###
+
+POST http://localhost:3001/signup
+Content-Type: application/json
+
+{
+    "email": "3@gmail.com",
+    "pass": "Riponbiswas1@",
+    "cpass": "Riponbiswas1@"
+}
+
+###
+
+POST http://localhost:3001/post
+Content-Type: application/json
+
+{
+    "email": "ripon",
+    "content": "chakri ta ami peye gechi bela suncho????"
+}
+
+###
+
+GET http://localhost:3001/
+
+###
+
+GET http://localhost:3001/my-post
+Content-Type: application/json
+
+{
+    "email": "riponbiswas"
+}
