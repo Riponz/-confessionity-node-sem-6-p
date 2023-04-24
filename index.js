@@ -47,7 +47,12 @@ app.get("/login", async (req, res) => {
 
   if (users.length != 0) {
     if (pass === user.pass) {
-      res.json({ email: user.email, userid: user.userid, status:"success", message: "success" });
+      res.json({
+        email: user.email,
+        userid: user.userid,
+        status: "success",
+        message: "success",
+      });
     } else {
       res.json({ status: "fail", message: "Password does not match" });
     }
@@ -55,8 +60,6 @@ app.get("/login", async (req, res) => {
     res.json({ status: "fail", message: "Email does not exist" });
   }
 });
-
-
 
 //route for signup page
 app.post("/signup", async (req, res) => {
@@ -74,22 +77,20 @@ app.post("/signup", async (req, res) => {
   });
 
   const users = await User.find({ email: email });
-  if (users.length === 0){
+  if (users.length === 0) {
     const ret = await user.save();
 
     const send = {
       userid: ret.userid,
       email: ret.email,
-      status: "success" ,
+      status: "success",
       message: "account created successfully",
     };
-  
+
     res.json(send);
-  }else{
-    res.json({status:"failed", message:"email already exist"});
+  } else {
+    res.json({ status: "failed", message: "email already exist" });
   }
-
-
 });
 
 //route for posting a new post
@@ -131,7 +132,29 @@ app.get("/my-post", async (req, res) => {
   res.json(myPosts);
 });
 
+app.get("/post-details", async (req, res) => {
+  const id = req.query.id;
+  const post = await Post.findOne({ _id: id });
+  res.json(post)
+});
 
+app.post("/comments", async (req, res) => {
+  const id = req.body.id;
+  const comment = req.body.comment;
+
+  console.log(id, comment);
+
+  await Post.findOneAndUpdate(
+    {
+      _id: id,
+    },
+    {
+      $push: {
+        comments: comment,
+      },
+    }
+  );
+});
 
 //route for deleting a specific post from the user's post list
 app.delete("/delete-post", async (req, res) => {

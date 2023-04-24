@@ -17,7 +17,8 @@ const postSchema = new mongoose.Schema({
     content:{
         type: String,
         required: true,
-    }
+    },
+    comments:[String],
 })
 
 module.exports = mongoose.model('post', postSchema)
