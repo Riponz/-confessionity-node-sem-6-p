@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const User = require("./model/userModel");
 const Post = require("./model/postModel");
+const Group = require("./model/groupModel");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
@@ -135,7 +136,7 @@ app.get("/my-post", async (req, res) => {
 app.get("/post-details", async (req, res) => {
   const id = req.query.id;
   const post = await Post.findOne({ _id: id });
-  res.json(post)
+  res.json(post);
 });
 
 app.post("/comments", async (req, res) => {
@@ -171,4 +172,47 @@ app.delete("/delete-post", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`server up and running on ${port}`);
+});
+
+//test routes
+
+app.post("/group", (req, res) => {
+  const name = req.body.name;
+  const user = req.body.user;
+  const bio = req.body.bio;
+
+  const group = new Group({
+    name,
+    admin: user,
+    bio,
+  });
+
+  group.save();
+
+  res.send(group);
+});
+
+app.get("/group", async (req, res) => {
+  const data = await Group.find();
+
+  res.json(data);
+});
+
+app.post("/grp-post", async (req, res) => {
+  const admin = req.body.admin;
+  const content = req.body.content;
+
+  const id = "64510d9efe1ff3fd4f5e49f6";
+  const resp = await Group.findOneAndUpdate(
+    { _id: id },
+    {
+      $push: {
+        comments: {
+            comments:content
+        }
+      },
+    }
+  );
+
+  res.json(resp);
 });

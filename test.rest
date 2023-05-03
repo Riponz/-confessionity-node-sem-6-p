@@ -33,3 +33,27 @@ Content-Type: application/json
 {
     "email": "riponbiswas"
 }
+
+###
+
+POST http://localhost:3001/group
+Content-Type: application/json
+
+{
+    "name": "biogroup",
+    "user":"yoyo",
+    "bio":"ujcydsclbduycbdscbdsyuc"
+}
+
+###
+
+GET http://localhost:3001/group
+
+###
+
+POST http://localhost:3001/grp-post
+Content-Type: application/json
+
+{
+    "content":"running"
+}
