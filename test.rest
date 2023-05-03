@@ -40,9 +40,9 @@ POST http://localhost:3001/group
 Content-Type: application/json
 
 {
-    "name": "biogroup",
-    "user":"yoyo",
-    "bio":"ujcydsclbduycbdscbdsyuc"
+    "name": "diganta",
+    "user":"djak",
+    "bio":"this is my grp bio"
 }
 
 ###
@@ -51,9 +51,23 @@ GET http://localhost:3001/group
 
 ###
 
+POST http://localhost:3001/grp-post-comment
+Content-Type: application/json
+
+{
+    "content":"comments running3"
+}
+
+###
+
 POST http://localhost:3001/grp-post
 Content-Type: application/json
 
 {
-    "content":"running"
+    "admin":"diganta",
+    "content":"post1"
 }
+
+###
+
+GET http://localhost:3001/group?id=64510d6e23e9da804ea3bf91

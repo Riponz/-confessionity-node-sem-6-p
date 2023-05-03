@@ -20,7 +20,11 @@ const groupSchema = new mongoose.Schema({
   posts: [
     {
       username: { type: String },
-      date: { type: Date },
+      date: {
+        type: Date,
+        default: Date.now,
+        required: true,
+      },
       content: { type: String },
       comments: [String],
     },

@@ -176,7 +176,13 @@ app.listen(port, () => {
 
 //test routes
 
-app.post("/group", (req, res) => {
+app.get("/group", async (req, res) => {
+  const id = req.query.id;
+  const resp = await Group.findOne({ _id: id });
+  res.json(resp)
+});
+
+app.post("/groups", (req, res) => {
   const name = req.body.name;
   const user = req.body.user;
   const bio = req.body.bio;
@@ -192,7 +198,7 @@ app.post("/group", (req, res) => {
   res.send(group);
 });
 
-app.get("/group", async (req, res) => {
+app.get("/groups", async (req, res) => {
   const data = await Group.find();
 
   res.json(data);
@@ -201,15 +207,25 @@ app.get("/group", async (req, res) => {
 app.post("/grp-post", async (req, res) => {
   const admin = req.body.admin;
   const content = req.body.content;
-
-  const id = "64510d9efe1ff3fd4f5e49f6";
+  console.log(admin, content);
+  const id = req.body.id;
   const resp = await Group.findOneAndUpdate(
     { _id: id },
+    { $push: { posts: { username: admin, content: content } } }
+  );
+  res.json(resp);
+});
+
+app.post("/grp-post-comment", async (req, res) => {
+  const admin = req.body.admin;
+  const content = req.body.content;
+
+  const id = "6452b7ba7ee20d6fc0e711b0";
+  const resp = await Group.updateMany(
+    { posts: { $elemMatch: { _id: id } } },
     {
       $push: {
-        comments: {
-            comments:content
-        }
+        "posts.$[].comments": content,
       },
     }
   );
