@@ -16,7 +16,6 @@ const {
   colors,
   animals,
 } = require("unique-names-generator");
-// console.log(randomName)
 
 const app = express();
 app.use(
@@ -59,8 +58,6 @@ app.get("/login", async (req, res) => {
         },
         secret
       );
-      // console.log(token);
-      // res.cookie("token", token)
       res.json({
         token: token,
         email: user.email,
@@ -170,8 +167,6 @@ app.post("/comments", async (req, res) => {
   const id = req.body.id;
   const comment = req.body.comment;
 
-  console.log(id, comment);
-
   await Post.findOneAndUpdate(
     {
       _id: id,
@@ -188,10 +183,6 @@ app.post("/comments", async (req, res) => {
 app.delete("/delete-post", async (req, res) => {
   const postId = req.body.postId;
 
-  {
-    /* delete the specific post and return a success/failure message */
-  }
-  console.log(postId);
   const data = await Post.deleteOne({ _id: postId });
 
   res.json(req.body);
@@ -234,7 +225,6 @@ app.get("/groups", async (req, res) => {
 app.post("/grp-post", async (req, res) => {
   const admin = req.body.admin;
   const content = req.body.content;
-  console.log(admin, content);
   const id = req.body.id;
   const resp = await Group.findOneAndUpdate(
     { _id: id },
