@@ -1,10 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const User = require("./model/userModel");
 const Post = require("./model/postModel");
 const Group = require("./model/groupModel");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const secret =
+  "jcnducbduhvciswdvcbduvbcdhjcbduivcbdfuyjhvcbdilvcwnsjvbwvbydrenc";
 
 const {
   uniqueNamesGenerator,
@@ -23,7 +27,7 @@ app.use(
 const port = 3001;
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cookieParser());
 app.use(bodyParser.json());
 
 //database connection
@@ -48,7 +52,17 @@ app.get("/login", async (req, res) => {
 
   if (users.length != 0) {
     if (pass === user.pass) {
+      const token = jwt.sign(
+        {
+          email: user.email,
+          userid: user.userid,
+        },
+        secret
+      );
+      // console.log(token);
+      // res.cookie("token", token)
       res.json({
+        token: token,
         email: user.email,
         userid: user.userid,
         status: "success",
@@ -60,6 +74,12 @@ app.get("/login", async (req, res) => {
   } else {
     res.json({ status: "fail", message: "Email does not exist" });
   }
+});
+
+app.post("/verifyToken", (req, res) => {
+  const token = req.body.token;
+  const data = jwt.verify(token, secret);
+  res.json(data);
 });
 
 //route for signup page
@@ -80,8 +100,15 @@ app.post("/signup", async (req, res) => {
   const users = await User.find({ email: email });
   if (users.length === 0) {
     const ret = await user.save();
-
+    const token = jwt.sign(
+      {
+        email: user.email,
+        userid: user.userid,
+      },
+      secret
+    );
     const send = {
+      token: token,
       userid: ret.userid,
       email: ret.email,
       status: "success",
@@ -179,7 +206,7 @@ app.listen(port, () => {
 app.get("/group", async (req, res) => {
   const id = req.query.id;
   const resp = await Group.findOne({ _id: id });
-  res.json(resp)
+  res.json(resp);
 });
 
 app.post("/groups", (req, res) => {
