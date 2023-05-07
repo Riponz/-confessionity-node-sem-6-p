@@ -7,6 +7,8 @@ const Group = require("./model/groupModel");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt')
+const salt = 10
 const secret =
   "jcnducbduhvciswdvcbduvbcdhjcbduivcbdfuyjhvcbdilvcwnsjvbwvbydrenc";
 
@@ -48,20 +50,25 @@ app.get("/login", async (req, res) => {
   const users = await User.find({ email: email });
 
   const user = users[0];
+  console.log("users",users)
+  console.log("user",user)
 
   if (users.length != 0) {
-    if (pass === user.pass) {
+
+    console.log("verify",user?.pass)
+    const verify = await bcrypt.compare(pass,user?.pass)
+    if (verify) {
       const token = jwt.sign(
         {
-          email: user.email,
-          userid: user.userid,
+          email: user?.email,
+          userid: user?.userid,
         },
         secret
       );
       res.json({
         token: token,
-        email: user.email,
-        userid: user.userid,
+        email: user?.email,
+        userid: user?.userid,
         status: "success",
         message: "success",
       });
@@ -84,6 +91,7 @@ app.post("/signup", async (req, res) => {
   // const userid = auto-generated
   const email = req.body.email;
   const pass = req.body.password;
+  const hash = await bcrypt.hash(pass,salt);
   const randomName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
   });
@@ -91,7 +99,7 @@ app.post("/signup", async (req, res) => {
   const user = new User({
     userid: randomName,
     email: email,
-    pass: pass,
+    pass: hash,
   });
 
   const users = await User.find({ email: email });
