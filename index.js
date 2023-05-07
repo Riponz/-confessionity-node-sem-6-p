@@ -20,11 +20,13 @@ const {
 } = require("unique-names-generator");
 
 const app = express();
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//   })
+// );
+
 const port = 3001;
 
 app.use(bodyParser.urlencoded({ extended: false }));
