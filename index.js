@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 
 //database connection
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb://127.0.0.1:27017/confessionityUsers", {
+mongoose.connect("mongodb+srv://cyphenx:Riponbiswas1@cluster0.hti4ycg.mongodb.net/?retryWrites=true&w=majority", {
   useNewUrlParser: true,
 });
 const db = mongoose.connection;
@@ -208,11 +208,12 @@ app.get("/group", async (req, res) => {
   res.json(resp);
 });
 
-app.post("/groups", (req, res) => {
+app.post("/group", (req, res) => {
   const name = req.body.name;
   const user = req.body.user;
   const bio = req.body.bio;
 
+  console.log(name, user,bio)
   const group = new Group({
     name,
     admin: user,
