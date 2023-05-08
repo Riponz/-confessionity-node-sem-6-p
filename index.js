@@ -21,11 +21,11 @@ const {
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//   })
-// );
+app.use(
+  cors({
+    origin: ["https://confessionity.web.app","https://confessionity.netlify.app/"],
+  })
+);
 
 const port = 3001;
 
