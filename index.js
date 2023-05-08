@@ -23,7 +23,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://confessionity.web.app","https://confessionity.netlify.app/"],
+    origin: ["https://confessionity.web.app","https://confessionity.netlify.app", "http://localhost:5173"],
   })
 );
 
