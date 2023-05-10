@@ -21,7 +21,7 @@ const {
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "https://confessionity.web.app/" }));
 
 const PORT = process.env.PORT || 3001;
 
@@ -196,7 +196,6 @@ app.delete("/delete-post", async (req, res) => {
   res.json(req.body);
 });
 
-
 //test routes
 
 app.get("/group", async (req, res) => {
@@ -255,7 +254,6 @@ app.post("/grp-post-comment", async (req, res) => {
 
   res.json(resp);
 });
-
 
 app.listen(PORT, () => {
   console.log(`server up and running on ${PORT}`);
