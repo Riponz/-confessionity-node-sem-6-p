@@ -7,8 +7,8 @@ const Group = require("./model/groupModel");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt')
-const salt = 10
+const bcrypt = require("bcrypt");
+const salt = 10;
 const secret =
   "jcnducbduhvciswdvcbduvbcdhjcbduivcbdfuyjhvcbdilvcwnsjvbwvbydrenc";
 
@@ -21,13 +21,9 @@ const {
 
 const app = express();
 
-app.use(
-  cors({
-    origin: ["https://confessionity.web.app","https://confessionity.netlify.app", "http://localhost:5173"],
-  })
-);
+app.use(cors());
 
-const port = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -35,9 +31,12 @@ app.use(bodyParser.json());
 
 //database connection
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb+srv://cyphenx:Riponbiswas1@cluster0.hti4ycg.mongodb.net/?retryWrites=true&w=majority", {
-  useNewUrlParser: true,
-});
+mongoose.connect(
+  "mongodb+srv://cyphenx:Riponbiswas1@cluster0.hti4ycg.mongodb.net/?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+  }
+);
 const db = mongoose.connection;
 db.on("error", (error) => {
   console.error(error);
@@ -52,13 +51,12 @@ app.get("/login", async (req, res) => {
   const users = await User.find({ email: email });
 
   const user = users[0];
-  console.log("users",users)
-  console.log("user",user)
+  console.log("users", users);
+  console.log("user", user);
 
   if (users.length != 0) {
-
-    console.log("verify",user?.pass)
-    const verify = await bcrypt.compare(pass,user?.pass)
+    console.log("verify", user?.pass);
+    const verify = await bcrypt.compare(pass, user?.pass);
     if (verify) {
       const token = jwt.sign(
         {
@@ -93,7 +91,7 @@ app.post("/signup", async (req, res) => {
   // const userid = auto-generated
   const email = req.body.email;
   const pass = req.body.password;
-  const hash = await bcrypt.hash(pass,salt);
+  const hash = await bcrypt.hash(pass, salt);
   const randomName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
   });
@@ -198,9 +196,6 @@ app.delete("/delete-post", async (req, res) => {
   res.json(req.body);
 });
 
-app.listen(port, () => {
-  console.log(`server up and running on ${port}`);
-});
 
 //test routes
 
@@ -215,7 +210,7 @@ app.post("/group", (req, res) => {
   const user = req.body.user;
   const bio = req.body.bio;
 
-  console.log(name, user,bio)
+  console.log(name, user, bio);
   const group = new Group({
     name,
     admin: user,
@@ -259,4 +254,9 @@ app.post("/grp-post-comment", async (req, res) => {
   );
 
   res.json(resp);
+});
+
+
+app.listen(PORT, () => {
+  console.log(`server up and running on ${PORT}`);
 });
