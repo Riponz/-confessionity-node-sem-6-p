@@ -21,7 +21,7 @@ const {
 
 const app = express();
 
-app.use(cors({ origin: "https://confessionity.web.app/", "http://localhost:5173/" }));
+app.use(cors({ origin: ["https://confessionity.web.app/", "http://localhost:5173/"] }));
 
 const PORT = process.env.PORT || 3001;
 
